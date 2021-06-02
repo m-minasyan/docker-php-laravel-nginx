@@ -12,6 +12,15 @@ RUN apt-get update && apt-get install -y \
 	unzip \
 	nginx
 
+# Install Google Chrome (uncomment, if you need it)
+#RUN apt-get update && apt-get install -y \
+#	google-chrome-stable \
+#	python3 \
+#	python3-pip
+#RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
+#RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+#RUN pip3 install selenium
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -50,7 +59,7 @@ RUN php artisan migrate
 RUN php artisan view:clear
 RUN php artisan cache:clear
 
-# Set memory limit unlimited for some tests and then delete that script
+# Set memory limit unlimited for some tests and then delete that script (uncomment, if you need it)
 #RUN echo "memory_limit = -1" > $PHP_INI_DIR/conf.d/memory-limit.ini
 #RUN rm $PHP_INI_DIR/conf.d/memory-limit.ini
 
