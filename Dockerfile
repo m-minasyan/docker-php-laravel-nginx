@@ -40,19 +40,26 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/
 
+# Copying project and nginx configuration
 COPY . .
 COPY ./nginx/php.conf /etc/nginx/conf.d/php.conf
 
+# Composer install command and php commands
 RUN composer install
 RUN php artisan migrate
 RUN php artisan view:clear
 RUN php artisan cache:clear
+
+# Set memory limit unlimited for some tests and then delete that script
 #RUN echo "memory_limit = -1" > $PHP_INI_DIR/conf.d/memory-limit.ini
 #RUN rm $PHP_INI_DIR/conf.d/memory-limit.ini
+
+# Set right permissions commands
 RUN gpasswd -a "root" www-data
 RUN chown -R "root":www-data /var/www
 RUN find /var/www -type f -exec chmod 0660 {} \;
 RUN find /var/www -type d -exec chmod 2770 {} \;
 RUN chmod +x ./start.sh
 
+# Start
 CMD ["./start.sh"]
